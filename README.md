@@ -1,4 +1,4 @@
-# 移动端页面：定位，城市选择
+# 移动端页面：定位，城市选择，rem+媒体查询
 
 ## 页面一
 ![image](https://user-images.githubusercontent.com/61956206/202126294-bff74259-1a50-4254-b534-99411434e5a3.png)
