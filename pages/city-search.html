@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="../css/public/adapter.css">
+  <link rel="stylesheet" href="../css/public/normalize.css">
+  <!-- <link rel="stylesheet" href="../css/public/reset.css"> -->
+  <link rel="stylesheet/less" type="text/css" href="../css/public/common.less">
+
+  <link rel="stylesheet" href="../css/city-search.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="navbar">
+      <div class="nav-wrap-left">
+        <span class="nav-city">
+          <img src="https://p1.meituan.net/travelcube/53361fd0bb6b333e779377789a8d669e531.png" alt="">
+        </span>
+      </div>
+
+      <div class="box-search">
+        <img src="https://p0.meituan.net/travelcube/99c29829cf1b85d5cdbc76a1bd0b7329814.png" alt="">
+        <input type="text" placeholder="找城市/区县...">
+      </div>
+    </header>
+
+    <div class="citys">
+      <div class="box-nowL">
+        <div class="title">当前：</div>
+        <div class="nowL-content">
+          <img src="https://p1.meituan.net/travelcube/c6c04160817d530ecddf9f86b158106e2032.png" alt="">
+          <span>重新定位</span>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="title">热门城市</div>
+        <div class="content">
+          <ul>
+            <li><a href="###">上海</a></li>
+            <li><a href="###">北京</a></li>
+            <li><a href="###">深圳</a></li>
+            <li><a href="###">广州</a></li>
+            <li><a href="###">成都</a></li>
+            <li><a href="###">杭州</a></li>
+            <li><a href="###">南京</a></li>
+            <li><a href="###">重庆</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- box... -->
+    </div>
+
+    <!-- 搜索展示 -->
+    <div class="showFind" style="display: none;">
+      <ul></ul>
+    </div>
+
+    <!-- 侧边快捷导航 -->
+    <ul class="nav-left"></ul>
+
+    <!-- 悬浮显示字母 -->
+    <div class="letter" style="display: none;">A</div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/less@4"></script>
+  <script src="../js/public/sort-citys.js"></script>
+  <script src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=StZPFUf7TFqX5VCsGna5Po7ar9SLnuYk"></script>
+  <script>
+    let citys = JSON.parse(citysJson)
+
+    citys = citys.filter(item => {
+      return item.data.length > 0
+    })
+
+    // 遍历城市
+    function fillCitys() {
+      let citysDiv = document.querySelector('.citys')
+
+      // 遍历每一个字母
+      citys.forEach(item => {
+        let boxDiv = document.createElement('div')
+        boxDiv.className = 'box'
+
+        // 只能使用innerHTML实现
+        boxDiv.innerHTML = `
+        <div class="title">${item.letters.toUpperCase()}</div>
+        <div class="content">
+          <ul>
+
+          </ul>
+        </div>
+      `
+
+        let liEle = ''
+
+        item.data.forEach(element => {
+          liEle += `<li><a href="###">${element}</a></li>`
+        })
+
+        boxDiv.getElementsByTagName('ul')[0].innerHTML = liEle
+
+        citysDiv.appendChild(boxDiv)
+      });
+    }
+
+    fillCitys()
+
+    // 定位
+    function getLocation() {
+      let localcity = new BMapGL.LocalCity()
+      let boxNowLDiv = document.querySelector('.box-nowL')
+      boxNowLDiv.getElementsByClassName('title')[0].textContent = '当前：定位中...'
+
+      localcity.get(e => {
+        boxNowLDiv.getElementsByClassName('title')[0].textContent = '当前：'
+        boxNowLDiv.getElementsByClassName('title')[0].appendChild(document.createTextNode(e.name))
+      })
+    }
+
+    getLocation()
+
+    // 重新定位
+    document.querySelector('.nowL-content').onclick = getLocation
+
+    // 返回
+    document.querySelector('.nav-city').onclick = function () {
+      location.replace('../index.html')
+    }
+
+    // 点击城市/事件委托
+    document.querySelector('.citys').onclick = function (e) {
+      if (e.target.nodeName === 'A') {
+        let text = e.target.textContent
+
+        location.replace(`../index.html?city=${text}`)
+      }
+    }
+
+    // 点击当前
+    document.querySelector('.box-nowL').onclick = function (e) {
+      let text = document.querySelector('.box-nowL .title').textContent.slice(3)
+
+      if (e.target.nodeName === 'DIV') location.replace(`../index.html?city=${text}`)
+    }
+
+    // 搜索
+    document.querySelector('.box-search input').onkeydown = function (e) {
+      let text = e.target.value
+
+      if (e.keyCode === 13 & text !== '') {
+        findCitys(text)
+      }
+
+      if (e.keyCode === 13 & text === '') {
+        document.querySelector('.citys').style.display = 'block'
+        document.querySelector('.showFind').style.display = 'none'
+        document.querySelector('.nav-left').style.display = 'block'
+      }
+    }
+
+    // 检索
+    function findCitys(data) {
+      document.querySelector('.citys').style.display = 'none'
+      document.querySelector('.showFind').style.display = 'block'
+      document.querySelector('.nav-left').style.display = 'none'
+
+      let len = data.length
+      let citysArr = []
+      let eleStr = ''
+
+      citys.forEach(item1 => {
+        item1.data.forEach(item2 => {
+          // item2城市名称
+          if (item2.slice(0, len) === data) {
+            citysArr.push(item2)
+          }
+        })
+      })
+
+      if (citysArr.length) {
+        citysArr.forEach(item => {
+          eleStr += `<li>${item}</li>`
+        })
+      } else {
+        eleStr = '<li>无结果</li>'
+      }
+
+      document.querySelector('.showFind ul').innerHTML = eleStr
+    }
+
+    document.querySelector('.showFind ul').onclick = function (e) {
+      if (e.target.nodeName === 'LI') {
+        let text = e.target.textContent
+
+        location.replace(`../index.html?city=${text}`)
+      }
+    }
+
+    // 保存字母
+    let zh = []
+
+    // 显示字母导航栏
+    function setNavLeft() {
+      let letters = citys.map((item) => {
+        zh.push(item.letters.toUpperCase())
+
+        return `<li>${item.letters.toUpperCase()}</li>`
+      })
+
+      document.querySelector('.nav-left').innerHTML = letters.join('')
+    }
+
+    setNavLeft()
+
+    // 滚动时候显示当前字母
+    function showNowLetter() {
+      let timer = null
+      let timer1 = null
+      let letter = ''
+
+      window.onscroll = function () {
+        // 监听滚动结束事件
+        clearTimeout(timer)
+        timer = setTimeout(function () {
+          document.querySelector('.letter').style.display = 'none'
+        }, 1000)
+
+        // 以高度的一半为准，无论上滚还是下滚
+        let boxs = document.querySelectorAll('.box')
+        boxs.forEach((item, index) => {
+          if (index) {
+            if (item.getBoundingClientRect().top < window.innerHeight / 2) {
+              letter = item.getElementsByClassName('title')[0].textContent
+            }
+          }
+        })
+
+        document.querySelector('.letter').textContent = letter
+        document.querySelector('.letter').style.display = 'block'
+
+        // 点击和触摸事件都会触发滚动事件
+        document.querySelectorAll('.nav-left li').forEach(ele => {
+          ele.style.background = ''
+        })
+        document.querySelectorAll('.nav-left li')[zh.indexOf(letter)].style.background = '#FFD000'
+        
+        clearTimeout(timer1)
+        timer1 = setTimeout(function () {
+          document.querySelectorAll('.nav-left li')[zh.indexOf(letter)].style.background = ''
+        }, 1000)
+        
+      }
+    }
+
+    showNowLetter()
+
+    // 点击/滑动字母时显示对应的城市列表
+    function showMapCitys() {
+      let iden
+      let nowCitysList
+      let timer = null
+
+      document.querySelector('.nav-left').onclick = function (e) {
+        if (e.target.nodeName === 'LI') {
+          // document.querySelectorAll('.nav-left li').forEach(ele => {
+          //   ele.style.background = ''
+          // })
+
+          // e.target.style.background = '#FFD000'
+          iden = zh.indexOf(e.target.textContent) + 1
+          nowCitysList = document.querySelectorAll('.box').item(iden)
+
+          // offsetTop指元素偏移量，滚动到指定位置（滚动到中间：少移动window.innerHeight / 2距离）
+          window.scrollTo(0, nowCitysList.offsetTop - (window.innerHeight / 2) + 50)  // +1是为了确保能显示正确，+50（标题的高）是为了显示更加舒适
+        }
+      }
+
+      document.querySelector('.nav-left').addEventListener('touchmove', function (e) {
+        e.preventDefault()  // 阻止滚动事件
+
+        // let timer
+
+        // 触摸会有中断，效果不好
+        // clearTimeout(timer)
+        // timer = setTimeout(() => {
+        //   this.style.width = '0.8rem'
+        // }, 1000)
+
+        // 先获得位置，然后获得元素
+        let nowEleLoc = e.changedTouches[0]  // 触摸元素的坐标
+        let nowEle = document.elementFromPoint(nowEleLoc.clientX, nowEleLoc.clientY)  // 获得触摸元素
+
+        if (nowEle.nodeName === 'LI') {
+          // document.querySelectorAll('.nav-left li').forEach(ele => {
+          //   ele.style.background = ''
+          // })
+
+          // nowEle.style.background = '#FFD000'
+          iden = zh.indexOf(nowEle.textContent) + 1
+          nowCitysList = document.querySelectorAll('.box').item(iden)  // 城市列表的DIV
+
+          // offsetTop指元素偏移量，滚动到指定位置（滚动到中间）
+          window.scrollTo(0, nowCitysList.offsetTop - window.innerHeight / 2 + 1)  // +1是为了确保能显示正确
+        }
+      })
+
+      document.querySelector('.nav-left').addEventListener('touchstart', function (e) {
+        // this.style.transition = 'width 0.3s'
+        this.style.width = '1.2rem'
+        
+        clearTimeout(timer)
+      })
+
+      document.querySelector('.nav-left').addEventListener('touchend', function (e) {
+        timer = setTimeout(() => {
+          // this.style.transition = 'width 1s'
+          this.style.width = '0.8rem'
+        }, 1000)
+      })
+    }
+
+    showMapCitys()
+
+  </script>
+</body>
+
+</html>

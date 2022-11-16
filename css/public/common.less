@@ -1,0 +1,89 @@
+// 除height外，全局单位使用rem
+
+/* 公共样式 */
+@height: 50.5px;
+
+/* IE盒子模型 */
+* {
+  box-sizing: border-box;
+}
+
+/* 版心 */
+.container {
+  width: 15rem;
+  margin: 0 auto;
+  padding-top: 50.5px;
+}
+
+// index,city-search共用样式
+.navbar {
+  width: 100%;
+  height: 50.5px;
+  background-image: linear-gradient(135deg, #FFD000 0%, #FFBD00 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.navbar div {
+  float: left;
+}
+
+// 左
+.nav-wrap-left {
+  width: 1.508rem;
+  height: 50.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// 有一定的点击范围
+.nav-city {
+  display: block;
+  width: 80%;
+  height: 80%;
+  line-height: @height * 0.8;  /* 行高的百分比参照自身 */
+  text-align: center;
+  font-size: .28rem;
+  overflow: hidden;
+}
+
+.nav-city img {
+  width: .16rem;
+  vertical-align: middle;  /* 取消基线对齐 */
+}
+
+.box-search {
+  width: 12.512rem;
+  height: 50.5px;
+  position: relative;
+}
+
+// 参考input定位
+.box-search img {
+  width: .28rem;
+  position: absolute;
+  top: 50%;
+  left: .34rem;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 10;
+}
+
+.box-search input {
+  width: 100%;
+  height: 32px;
+  border: none;
+  border-radius: .18rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: .26rem;
+  padding-left: .68rem;
+}
+
+.box-search input:focus {
+  border: none;
+  outline: none;
+}

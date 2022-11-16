@@ -1,0 +1,122 @@
+/* ol/ul resset */
+ol, ul {
+	list-style: none;
+}
+
+ol, ul, li, a {
+  margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* a reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-wrap-left .nav-city img {
+  width: .2rem;
+}
+
+.box-search {
+  width: 13.292rem;
+}
+
+.box-nowL {
+  position: relative;
+}
+
+.box-nowL .nowL-content {
+  font-size: .3rem;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  margin-right: .2rem;
+}
+
+.box-nowL .nowL-content img {
+  width: .24rem;
+  vertical-align: middle;
+}
+
+.citys .title {
+  font-size: .3rem;
+  font-weight: 500;
+  height: 40px;
+  line-height: 40px;
+  padding-left: .2rem;
+  margin-bottom: .2rem;
+}
+
+.citys .content {
+  font-size: .28rem;
+}
+
+.citys .content ul {
+  overflow: hidden;
+}
+
+.citys .content li {
+  float: left;
+  width: 3.5rem;
+  height: 40px;
+  border-radius: .1rem;
+  margin-bottom: .2rem;
+  margin-left: .2rem;
+  border: 1px solid rgb(221, 216, 206);
+}
+
+.citys .content li a {
+  display: block;
+  height: 100%;
+  line-height: 40px;
+  text-align: center;
+}
+
+.showFind li {
+  height: 40px;
+  line-height: 40px;
+  padding-left: .2rem;
+  font-size: .3rem;
+  border-bottom: 1px solid rgb(221, 216, 206);
+}
+
+.nav-left {
+  position: fixed;
+  top: 50%;
+  right: .2rem;
+  transform: translateY(-50%);
+  background: rgb(245, 245, 245);
+  width: .8rem;
+  border-radius: .18rem;
+  padding-top: .2rem;
+  z-index: 1000;
+}
+
+/* 此处高度响应式 */
+.nav-left li {
+  font-size: .3rem;
+  text-align: center;
+  /* margin-bottom: .2rem; */
+  height: .545rem;
+  line-height: .545rem;
+}
+
+.letter {
+  width: 1.6rem;
+  height: 40px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius: .18rem;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1rem;
+  background: rgb(245, 245, 245);
+}

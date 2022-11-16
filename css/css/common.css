@@ -1,0 +1,73 @@
+/* 公共样式 */
+/* IE盒子模型 */
+* {
+  box-sizing: border-box;
+}
+/* 版心 */
+.container {
+  width: 15rem;
+  margin: 0 auto;
+  padding-top: 50.5px;
+}
+.navbar {
+  width: 100%;
+  height: 50.5px;
+  background-image: linear-gradient(135deg, #FFD000 0%, #FFBD00 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.navbar div {
+  float: left;
+}
+.nav-wrap-left {
+  width: 1.508rem;
+  height: 50.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-city {
+  display: block;
+  width: 80%;
+  height: 80%;
+  line-height: 40.4px;
+  /* 行高的百分比参照自身 */
+  text-align: center;
+  font-size: 0.28rem;
+  overflow: hidden;
+}
+.nav-city img {
+  width: 0.16rem;
+  vertical-align: middle;
+  /* 取消基线对齐 */
+}
+.box-search {
+  width: 12.512rem;
+  height: 50.5px;
+  position: relative;
+}
+.box-search img {
+  width: 0.28rem;
+  position: absolute;
+  top: 50%;
+  left: 0.34rem;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 10;
+}
+.box-search input {
+  width: 100%;
+  height: 32px;
+  border: none;
+  border-radius: 0.18rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.26rem;
+  padding-left: 0.68rem;
+}
+.box-search input:focus {
+  border: none;
+  outline: none;
+}
